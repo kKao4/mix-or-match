@@ -24,36 +24,36 @@ const array1 = [
     name: "cauldron",
     src: cauldron,
   },
-  // {
-  //   id: 4,
-  //   name: "dracula",
-  //   src: dracula,
-  // },
-  // {
-  //   id: 5,
-  //   name: "eye",
-  //   src: eye,
-  // },
-  // {
-  //   id: 6,
-  //   name: "ghost",
-  //   src: ghost,
-  // },
-  // {
-  //   id: 7,
-  //   name: "pumpkin",
-  //   src: pumpkin,
-  // },
-  // {
-  //   id: 8,
-  //   name: "skull",
-  //   src: skull,
-  // },
-  // {
-  //   id: 9,
-  //   name: "joker",
-  //   src: joker,
-  // },
+  {
+    id: 4,
+    name: "dracula",
+    src: dracula,
+  },
+  {
+    id: 5,
+    name: "eye",
+    src: eye,
+  },
+  {
+    id: 6,
+    name: "ghost",
+    src: ghost,
+  },
+  {
+    id: 7,
+    name: "pumpkin",
+    src: pumpkin,
+  },
+  {
+    id: 8,
+    name: "skull",
+    src: skull,
+  },
+  {
+    id: 9,
+    name: "joker",
+    src: joker,
+  },
 ];
 
 const array2 = array1.map((card) => {

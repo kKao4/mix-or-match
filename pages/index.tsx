@@ -16,6 +16,8 @@ import Victory from "@/components/Victory/Victory"
 import { loseMemeSounds, wrongChooseMemeSounds, victoryMemeSounds, victoryNormalSounds, restartMemeSounds, rightChooseMemeSounds, rightChooseNormalSounds, rightChooseAnimeSounds, wrongChooseAnimeSounds, loseAnimeSounds, victoryAnimeSounds } from "@/data/Sound"
 import Settings from "@/components/Settings/Settings"
 import { useLocalStorage } from "usehooks-ts"
+import dynamic from "next/dynamic"
+const DynamicSettings = dynamic(() => import("@/components/Settings/Settings"))
 
 // TODO: add notification for settings
 
@@ -181,7 +183,7 @@ export default function Home() {
   }, [])
   return (
     <>
-      <Settings handleOpen={() => stopCountdown()} handleClose={() => startCountdown()} />
+      <DynamicSettings handleOpen={() => stopCountdown()} handleClose={() => startCountdown()} />
       <ClickToStart />
       <GameOver handleOnClick={restartGame} />
       <Victory handleOnClick={restartGame} />
