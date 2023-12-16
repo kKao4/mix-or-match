@@ -1,0 +1,25 @@
+@import "../node_modules/reset-css/sass/reset";
+@import "./variables";
+
+main * {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+main {
+  background: radial-gradient(#9d5900, #3d2200);
+  height: 100dvh;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: $second-orange-color;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $main-orange-color;
+  border-radius: 9999px;
+}

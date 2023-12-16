@@ -1,0 +1,64 @@
+@import "./variables";
+
+.container {
+  max-width: 780px;
+  margin: auto;
+  padding: 1.75rem 0.5rem;
+  @media (max-width: 767px) {
+    padding-top: 1.5rem;
+  }
+}
+
+.lead {
+  color: $main-orange-color;
+  font-size: 6.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  @media (max-width: 767px) {
+    font-size: 3.5rem;
+    margin-bottom: 1.75rem;
+  }
+}
+
+.status {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.5rem;
+  padding: 0 0.5rem;
+  @media (max-width: 767px) {
+    margin-bottom: 0.75rem;
+  }
+
+  .time {
+    flex: none;
+    font-size: 3.5rem;
+    color: $second-orange-color;
+    font-size: 3.5rem;
+    @media (max-width: 767px) {
+      font-size: 2.5rem;
+    }
+  }
+  .flip {
+    margin-left: auto;
+    flex: none;
+    font-size: 3.5rem;
+    color: $second-orange-color;
+    font-size: 3.5rem;
+    @media (max-width: 767px) {
+      font-size: 2.5rem;
+    }
+  }
+}
+
+.cardContainer {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+}
+

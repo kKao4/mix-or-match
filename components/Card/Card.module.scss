@@ -1,0 +1,98 @@
+$card-flip-color: rgb(255, 187, 137);
+$web-flip-color: rgb(62, 58, 55);
+
+@mixin card {
+  height: 160px;
+  width: 114px;
+  border-radius: 0.75rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  @media (max-width: 767px) {
+    height: 120px;
+    width: 85.5px;
+  }
+}
+@mixin web {
+  width: 45px;
+  height: 45px;
+  position: absolute;
+  transition: 0.15s ease-out;
+  @media (max-width: 767px) {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.card * {
+  user-select: none;
+}
+
+.card {
+  @include card();
+  background-color: black;
+  z-index: 10;
+
+  .web {
+    @include web();
+  }
+
+  .spider {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 84px;
+    height: 128px;
+    transform: translateX(-50%);
+    @media (max-width: 767px) {
+      width: 65.5px;
+      height: 100px;
+    }
+  }
+
+  &:hover > .web {
+    width: 49px;
+    height: 49px;
+    @media (max-width: 767px) {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+.cardFlip {
+  @include card();
+  background-color: $card-flip-color;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .webGray {
+    @include web();
+  }
+  .icon {
+    height: 70px;
+    width: auto;
+    @media (max-width: 767px) {
+      height: 52px;
+    }
+  }
+  .bat {
+    height: 58px;
+    width: auto;
+    @media (max-width: 767px) {
+      height: 42px;
+    }
+  }
+
+  &:hover > .webGray {
+    width: 49px;
+    height: 49px;
+    @media (max-width: 767px) {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}

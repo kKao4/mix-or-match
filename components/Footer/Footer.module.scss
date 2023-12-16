@@ -1,0 +1,12 @@
+@import "../../styles/variables";
+
+.footerContainer {
+  text-align: center;
+  font-size: 2rem;
+  color: $main-orange-color;
+  font-weight: 600;
+  padding-bottom: 1.75rem;
+  @media (max-width: 767px) {
+    font-size: 1.5rem;
+  }
+}
