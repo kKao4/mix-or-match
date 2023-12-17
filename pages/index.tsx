@@ -14,7 +14,6 @@ import GameOver from '@/components/GameOver/GameOver';
 import { useLockedBody } from 'usehooks-ts'
 import Victory from "@/components/Victory/Victory"
 import { loseMemeSounds, wrongChooseMemeSounds, victoryMemeSounds, victoryNormalSounds, restartMemeSounds, rightChooseMemeSounds, rightChooseNormalSounds, rightChooseAnimeSounds, wrongChooseAnimeSounds, loseAnimeSounds, victoryAnimeSounds } from "@/data/Sound"
-import Settings from "@/components/Settings/Settings"
 import { useLocalStorage } from "usehooks-ts"
 import dynamic from "next/dynamic"
 const DynamicSettings = dynamic(() => import("@/components/Settings/Settings"))
@@ -41,25 +40,6 @@ export default function Home() {
   useEffect(() => {
     setOrder(shuffleArray(Array.from({ length: cards.length }, (_, i) => i + 1)))
   }, [])
-
-  // play/stop background music
-  useEffect(() => {
-    if (audioRef.current) {
-      if (globalState.status === "play" && backgroundMusic) {
-        audioRef.current.volume = 0.3
-        audioRef.current.play()
-      } else {
-        audioRef.current?.pause()
-      }
-    }
-  }, [backgroundMusic, globalState.status])
-
-  // start countdown
-  useEffect(() => {
-    if (globalState.status === "play") {
-      startCountdown()
-    }
-  }, [count, globalState.status, startCountdown])
 
   const wrongChooseSounds = useMemo(() => {
     let sounds: string[] = []
@@ -117,12 +97,45 @@ export default function Home() {
     return sounds
   }, [memeSounds])
 
+  const backgroundSounds = useMemo(() => {
+    if (globalState.status === "lose") {
+      return loseSounds[Math.floor(Math.random() * loseSounds.length)]
+    } else if (globalState.status === "victory") {
+      return victorySounds[Math.floor(Math.random() * victorySounds.length)]
+    } else if (globalState.status === "play") {
+      return "/Assets_Audio_creepy.mp3"
+    }
+  }, [globalState.status, loseSounds, victorySounds])
+
+  // play/stop background music
+  useEffect(() => {
+    if (audioRef.current) {
+      if (backgroundMusic && globalState.status !== "idle") {
+        if (globalState.status === "play") {
+          audioRef.current.volume = 0.2
+        } else {
+          audioRef.current.volume = 1
+        }
+        audioRef.current.play()
+      } else {
+        audioRef.current?.pause()
+      }
+    }
+  }, [backgroundMusic, globalState.status])
+
+  // start countdown
+  useEffect(() => {
+    if (globalState.status === "play") {
+      startCountdown()
+    }
+  }, [count, globalState.status, startCountdown])
+
   // game over
   useEffect(() => {
     if (count === 0) {
       dispatch(toggleStatusGame("lose"))
-      const audio = new Audio(loseSounds[Math.floor(Math.random() * loseSounds.length)])
-      audio.play()
+      // const audio = new Audio(loseSounds[Math.floor(Math.random() * loseSounds.length)])
+      // audio.play()
     }
   }, [count, dispatch, loseSounds])
 
@@ -131,8 +144,8 @@ export default function Home() {
     if (cardGameState.activeCards.length === 0) {
       dispatch(toggleStatusGame("victory"))
       stopCountdown()
-      const audio = new Audio(victorySounds[Math.floor(Math.random() * victorySounds.length)])
-      audio.play()
+      // const audio = new Audio(victorySounds[Math.floor(Math.random() * victorySounds.length)])
+      // audio.play()
     }
   }, [cardGameState.activeCards.length, dispatch, stopCountdown, victorySounds])
 
@@ -184,11 +197,11 @@ export default function Home() {
   return (
     <>
       <DynamicSettings handleOpen={() => stopCountdown()} handleClose={() => startCountdown()} />
-      <ClickToStart />
+      {/* <ClickToStart /> */}
       <GameOver handleOnClick={restartGame} />
       <Victory handleOnClick={restartGame} />
       <audio
-        src="/Assets_Audio_creepy.mp3"
+        src={backgroundSounds}
         loop
         ref={audioRef}
         data-test="background-music"

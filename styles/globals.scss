@@ -8,7 +8,7 @@ main * {
 
 main {
   background: radial-gradient(#9d5900, #3d2200);
-  height: 100dvh;
+  min-height: 100dvh;
 }
 
 ::-webkit-scrollbar {
