@@ -18,8 +18,6 @@ import { useLocalStorage } from "usehooks-ts"
 import dynamic from "next/dynamic"
 const DynamicSettings = dynamic(() => import("@/components/Settings/Settings"))
 
-// TODO: add notification for settings
-
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [order, setOrder] = useState<number[]>()
@@ -134,8 +132,6 @@ export default function Home() {
   useEffect(() => {
     if (count === 0) {
       dispatch(toggleStatusGame("lose"))
-      // const audio = new Audio(loseSounds[Math.floor(Math.random() * loseSounds.length)])
-      // audio.play()
     }
   }, [count, dispatch, loseSounds])
 
@@ -144,8 +140,6 @@ export default function Home() {
     if (cardGameState.activeCards.length === 0) {
       dispatch(toggleStatusGame("victory"))
       stopCountdown()
-      // const audio = new Audio(victorySounds[Math.floor(Math.random() * victorySounds.length)])
-      // audio.play()
     }
   }, [cardGameState.activeCards.length, dispatch, stopCountdown, victorySounds])
 
@@ -197,7 +191,7 @@ export default function Home() {
   return (
     <>
       <DynamicSettings handleOpen={() => stopCountdown()} handleClose={() => startCountdown()} />
-      {/* <ClickToStart /> */}
+      <ClickToStart />
       <GameOver handleOnClick={restartGame} />
       <Victory handleOnClick={restartGame} />
       <audio
