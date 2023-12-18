@@ -14,21 +14,6 @@ describe("Home page", () => {
     });
   });
 
-  context("Game over", () => {
-    it("game over when countdown reach 0 and click anywhere to restart", () => {
-      cy.wait(60000);
-      cy.getByData("countdown").should("have.text", "0");
-      cy.get('[data-status="active"], [data-status="idle"]').should(
-        "have.length.greaterThan",
-        0
-      );
-      cy.getByData("game-over").should("exist");
-      cy.wait(1000);
-      cy.getByData("game-over").click();
-      cy.getByData("game-over").should("not.exist");
-    });
-  });
-
   context("Victory", () => {
     it("victory when no active cards left and click anywhere to restart", () => {
       cy.get('[data-role="bat"]').eq(0).click();
@@ -92,6 +77,21 @@ describe("Home page", () => {
       cy.get('[data-role="bat"]').eq(1).click();
       cy.wait(1000);
       cy.get('[data-status="disabled"]').should("have.length", 2);
+    });
+  });
+
+  context("Game over", () => {
+    it("game over when countdown reach 0 and click anywhere to restart", () => {
+      cy.wait(60000);
+      cy.getByData("countdown").should("have.text", "0");
+      cy.get('[data-status="active"], [data-status="idle"]').should(
+        "have.length.greaterThan",
+        0
+      );
+      cy.getByData("game-over").should("exist");
+      cy.wait(1000);
+      cy.getByData("game-over").click();
+      cy.getByData("game-over").should("not.exist");
     });
   });
 });

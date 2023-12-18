@@ -6,6 +6,10 @@ main * {
   font-family: inherit;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 main {
   background: radial-gradient(#9d5900, #3d2200);
   min-height: 100dvh;

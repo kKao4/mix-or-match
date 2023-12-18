@@ -1,3 +1,6 @@
+// meme sounds
+export const backgroundMemeSounds = ["/y2mate.is - Manuel Gas Gas Gas.mp3"];
+
 export const victoryMemeSounds = [
   "/yeah-boiii-i-i-i.mp3",
   "/window-error-remix.mp3",
@@ -57,6 +60,7 @@ export const clickMemeSounds = [
   // "/clickar.mp3",
 ];
 
+// anime sounds
 export const rightChooseAnimeSounds = [
   "/uhh-anime.mp3",
   "/y2mate.is - ara_ara______sound_effect.mp3",
@@ -99,6 +103,7 @@ export const victoryAnimeSounds = [
 ];
 
 // normal sounds
+export const backgroundNormalSounds = ["/Assets_Audio_creepy.mp3"];
 export const rightChooseNormalSounds = ["/Assets_Audio_match.wav"];
 export const victoryNormalSounds = ["/Assets_Audio_victory.wav"];
 export const clickNormalSounds = ["/Assets_Audio_flip.wav"];

@@ -12,28 +12,19 @@ import { useHover } from "usehooks-ts"
 import { increaseFlips } from "@/redux/cardGameSlice"
 import { clickMemeSounds, clickNormalSounds } from "@/data/Sound"
 import { useLocalStorage } from "usehooks-ts"
+import { useStatusCard } from "../hooks/useStatusCard"
 
 export default function Card({ src, name, order, id }: { src: any, name: string, order: number, id: number }) {
-  const [statusCard, setStatusCard] = useState<"idle" | "active" | "disabled">("idle")
+  // const [statusCard, setStatusCard] = useState<"idle" | "active" | "disabled">("idle")
   const cardGameState = useSelector((state: RootState) => state.cardGame)
   const dispatch = useDispatch<AppDispatch>()
   const hoverRef = useRef<HTMLDivElement>(null)
   const isHover = useHover(hoverRef)
-  const [memeSounds, setMemeSounds] = useLocalStorage("memeSounds", true)
+  const [memeSounds, setMemeSounds] = useLocalStorage("memeSounds", false)
   const [normalSounds, setNormalSounds] = useLocalStorage("normalSounds", true)
 
   // set status the card
-  useEffect(() => {
-    if (cardGameState.selectedCards.some(card => card.id === id) && cardGameState.activeCards.some(card => card.id === id) && !cardGameState.disabledCards.some(card => card.id === id)) {
-      setStatusCard("active")
-    } else if (!cardGameState.selectedCards.some(card => card.id === id) && cardGameState.activeCards.some(card => card.id === id) && !cardGameState.disabledCards.some(card => card.id === id)) {
-      setStatusCard("idle")
-    } else if (!cardGameState.selectedCards.some(card => card.id === id) && !cardGameState.activeCards.some(card => card.id === id) && cardGameState.disabledCards.some(card => card.id === id)) {
-      setTimeout(() => {
-        setStatusCard("disabled")
-      }, 200)
-    }
-  }, [cardGameState.activeCards, cardGameState.disabledCards, cardGameState.selectedCards, id])
+  const statusCard = useStatusCard({ id })
 
   const clickSounds = useMemo(() => {
     let sounds: string[] = []

@@ -6,21 +6,24 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { lunacyFont } from "./_app"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "@/redux/store"
-import { resetSelectedCards, addDisabledCards, removeActiveCards, toggleIsAnimating, restartCardGame } from "@/redux/cardGameSlice"
+import { restartCardGame } from "@/redux/cardGameSlice"
 import { useCountdown } from 'usehooks-ts'
-import { toggleStatusGame } from "@/redux/globalSlice"
 import ClickToStart from '@/components/ClickToStart/ClickToStart';
 import GameOver from '@/components/GameOver/GameOver';
-import { useLockedBody } from 'usehooks-ts'
 import Victory from "@/components/Victory/Victory"
-import { loseMemeSounds, wrongChooseMemeSounds, victoryMemeSounds, victoryNormalSounds, restartMemeSounds, rightChooseMemeSounds, rightChooseNormalSounds, rightChooseAnimeSounds, wrongChooseAnimeSounds, loseAnimeSounds, victoryAnimeSounds } from "@/data/Sound"
-import { useLocalStorage } from "usehooks-ts"
 import dynamic from "next/dynamic"
+import { useControlBackgroundMusic } from "@/components/hooks/useControlBackgroundMusic"
+import { useChooseWrongOrRightCards } from "@/components/hooks/useChooseWrongOrRightCards"
+import { useGenerateCardsOrder } from "@/components/hooks/useGenerateCardsOrder"
+import { useStartCountdown } from "@/components/hooks/useStartCountdown"
+import { useGameOver } from "@/components/hooks/useGameOver"
+import { useVictory } from "@/components/hooks/useVictory"
+import { useLockScroll } from "@/components/hooks/useLockScroll"
+import { useSounds } from "@/components/hooks/useSounds"
 const DynamicSettings = dynamic(() => import("@/components/Settings/Settings"))
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [order, setOrder] = useState<number[]>()
   const globalState = useSelector((state: RootState) => state.global)
   const cardGameState = useSelector((state: RootState) => state.cardGame)
   const dispatch = useDispatch<AppDispatch>()
@@ -28,148 +31,29 @@ export default function Home() {
     countStart: 60,
     intervalMs: 1000
   })
-  const [locked, setLocked] = useLockedBody(false, 'root')
-  const [animeSounds, setAnimeSounds] = useLocalStorage("animeSounds", false)
-  const [backgroundMusic, setBackgroundMusic] = useLocalStorage("backgroundMusic", true)
-  const [normalSounds, setNormalSounds] = useLocalStorage("normalSounds", true)
-  const [memeSounds, setMemeSounds] = useLocalStorage("memeSounds", true)
-
   // shuffle the cards
-  useEffect(() => {
-    setOrder(shuffleArray(Array.from({ length: cards.length }, (_, i) => i + 1)))
-  }, [])
+  const [order, setOrder] = useGenerateCardsOrder()
 
-  const wrongChooseSounds = useMemo(() => {
-    let sounds: string[] = []
-    if (memeSounds) {
-      sounds = sounds.concat(wrongChooseMemeSounds)
-      console.log("1")
-    }
-    if (animeSounds) {
-      sounds = sounds.concat(wrongChooseAnimeSounds)
-      console.log("2")
-    }
-    return sounds
-  }, [animeSounds, memeSounds])
-  const rightChooseSounds = useMemo(() => {
-    let sounds: string[] = []
-    if (normalSounds) {
-      sounds = sounds.concat(rightChooseNormalSounds)
-    }
-    if (memeSounds) {
-      sounds = sounds.concat(rightChooseMemeSounds)
-    }
-    if (animeSounds) {
-      sounds = sounds.concat(rightChooseAnimeSounds)
-    }
-    return sounds;
-  }, [animeSounds, memeSounds, normalSounds])
-  const loseSounds = useMemo(() => {
-    let sounds: string[] = []
-    if (memeSounds) {
-      sounds = sounds.concat(loseMemeSounds)
-    }
-    if (animeSounds) {
-      sounds = sounds.concat(loseAnimeSounds)
-    }
-    return sounds
-  }, [animeSounds, memeSounds])
-  const victorySounds = useMemo(() => {
-    let sounds: string[] = []
-    if (normalSounds) {
-      sounds = sounds.concat(victoryNormalSounds)
-    }
-    if (memeSounds) {
-      sounds = sounds.concat(victoryMemeSounds)
-    }
-    if (animeSounds) {
-      sounds = sounds.concat(victoryAnimeSounds)
-    }
-    return sounds
-  }, [animeSounds, memeSounds, normalSounds])
-  const restartSounds = useMemo(() => {
-    let sounds: string[] = []
-    if (memeSounds) {
-      sounds = sounds.concat(restartMemeSounds)
-    }
-    return sounds
-  }, [memeSounds])
+  // all sounds
+  const { wrongChooseSounds, rightChooseSounds, restartSounds, backgroundSounds } = useSounds()
 
-  const backgroundSounds = useMemo(() => {
-    if (globalState.status === "lose") {
-      return loseSounds[Math.floor(Math.random() * loseSounds.length)]
-    } else if (globalState.status === "victory") {
-      return victorySounds[Math.floor(Math.random() * victorySounds.length)]
-    } else if (globalState.status === "play") {
-      return "/Assets_Audio_creepy.mp3"
-    }
-  }, [globalState.status, loseSounds, victorySounds])
-
-  // play/stop background music
-  useEffect(() => {
-    if (audioRef.current) {
-      if (backgroundMusic && globalState.status !== "idle") {
-        if (globalState.status === "play") {
-          audioRef.current.volume = 0.2
-        } else {
-          audioRef.current.volume = 1
-        }
-        audioRef.current.play()
-      } else {
-        audioRef.current?.pause()
-      }
-    }
-  }, [backgroundMusic, globalState.status])
+  // control play/stop background music
+  useControlBackgroundMusic(audioRef, backgroundSounds)
 
   // start countdown
-  useEffect(() => {
-    if (globalState.status === "play") {
-      startCountdown()
-    }
-  }, [count, globalState.status, startCountdown])
+  useStartCountdown(startCountdown)
 
   // game over
-  useEffect(() => {
-    if (count === 0) {
-      dispatch(toggleStatusGame("lose"))
-    }
-  }, [count, dispatch, loseSounds])
+  useGameOver({ count })
 
   // victory 
-  useEffect(() => {
-    if (cardGameState.activeCards.length === 0) {
-      dispatch(toggleStatusGame("victory"))
-      stopCountdown()
-    }
-  }, [cardGameState.activeCards.length, dispatch, stopCountdown, victorySounds])
+  useVictory({ count, stopCountdown })
 
   // right/wrong choose
-  useEffect(() => {
-    if (cardGameState.selectedCards.length === 2 && cardGameState.selectedCards[0].name === cardGameState.selectedCards[1].name) {
-      dispatch(addDisabledCards([cardGameState.selectedCards[0], cardGameState.selectedCards[1]]))
-      dispatch(removeActiveCards([cardGameState.selectedCards[0], cardGameState.selectedCards[1]]))
-      dispatch(resetSelectedCards())
-      const audio = new Audio(rightChooseSounds[Math.floor(Math.random() * rightChooseSounds.length)])
-      audio.play()
-    } else if (cardGameState.selectedCards.length === 2 && cardGameState.selectedCards[0].name !== cardGameState.selectedCards[1].name) {
-      dispatch(toggleIsAnimating(true))
-      setTimeout(() => {
-        dispatch(toggleIsAnimating(false))
-        dispatch(resetSelectedCards())
-      }, 500)
-      const audio = new Audio(wrongChooseSounds[Math.floor(Math.random() * wrongChooseSounds.length)])
-      audio.play()
-    }
-  }, [cardGameState.selectedCards, dispatch, rightChooseSounds, wrongChooseSounds])
+  useChooseWrongOrRightCards({ rightChooseSounds, wrongChooseSounds })
 
   // lock scroll
-  useEffect(() => {
-    if (globalState.status !== "play") {
-      setLocked(true)
-    } else {
-      setLocked(false)
-    }
-  }, [globalState.status, setLocked])
+  useLockScroll()
 
   // restart game
   const restartGame = useCallback(() => {
@@ -180,7 +64,7 @@ export default function Home() {
     }, 600)
     const audio = new Audio(restartSounds[Math.floor(Math.random() * restartSounds.length)])
     audio.play()
-  }, [dispatch, resetCountdown, restartSounds])
+  }, [dispatch, resetCountdown, restartSounds, setOrder])
 
   const revealVariants: Variants = useMemo(() => {
     return {

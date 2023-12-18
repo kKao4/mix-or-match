@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "@/redux/store"
 import { toggleIsOpenSettings } from "@/redux/globalSlice"
 import { useOnClickOutside } from "usehooks-ts"
 import { useLocalStorage } from 'usehooks-ts'
+import { useSettingsNotification } from "../hooks/useSettingsNotification"
 
 export default function Settings({ handleOpen, handleClose }: { handleOpen?: any, handleClose?: any }) {
   const hoverRef = useRef<HTMLButtonElement>(null)
@@ -22,17 +23,12 @@ export default function Settings({ handleOpen, handleClose }: { handleOpen?: any
   const [animeSounds, setAnimeSounds] = useLocalStorage("animeSounds", false)
   const [backgroundMusic, setBackgroundMusic] = useLocalStorage("backgroundMusic", true)
   const [normalSounds, setNormalSounds] = useLocalStorage("normalSounds", true)
-  const [memeSounds, setMemeSounds] = useLocalStorage("memeSounds", true)
-  const [showNotification, setShowNotification] = useState<boolean>(true)
+  const [memeSounds, setMemeSounds] = useLocalStorage("memeSounds", false)
   useOnClickOutside(myRef, () => {
     dispatch(toggleIsOpenSettings(false))
     handleClose()
   })
-  useEffect(() => {
-    setTimeout(() => {
-      setShowNotification(false)
-    }, 8000)
-  }, [])
+  const showNotification = useSettingsNotification()
   return (
     <>
       {/* settings button */}
