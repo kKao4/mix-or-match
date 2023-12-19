@@ -11,9 +11,9 @@ export function useControlBackgroundMusic(audioRef: RefObject<HTMLAudioElement>,
       console.log(1)
       if (backgroundMusic && globalState.status !== "idle" && backgroundSounds) {
         if (globalState.status === "play") {
-          audioRef.current.volume = 0.4
+          audioRef.current.volume = 0.12
         } else {
-          audioRef.current.volume = 1
+          audioRef.current.volume = 0.8
         }
         audioRef.current.play()
       } else {
