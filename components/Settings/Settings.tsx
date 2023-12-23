@@ -10,7 +10,9 @@ import { useOnClickOutside } from "usehooks-ts"
 import { useLocalStorage } from 'usehooks-ts'
 import { useSettingsNotification } from "../hooks/useSettingsNotification"
 
-export default function Settings({ handleOpen, handleClose }: { handleOpen?: any, handleClose?: any }) {
+interface Props { handleOpen: () => void, handleClose: () => void }
+
+export default function Settings({ handleOpen, handleClose }: Props) {
   const hoverRef = useRef<HTMLButtonElement>(null)
   const isHover = useHover(hoverRef)
   const buttonVariants: Variants = {

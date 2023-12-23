@@ -13,8 +13,13 @@ import { increaseFlips } from "@/redux/cardGameSlice"
 import { clickMemeSounds, clickNormalSounds } from "@/data/Sound"
 import { useLocalStorage } from "usehooks-ts"
 import { useStatusCard } from "../hooks/useStatusCard"
+import { Card } from "@/data/Cards"
 
-export default function Card({ src, name, order, id }: { src: any, name: string, order: number, id: number }) {
+interface Props extends Card {
+  order: number
+}
+
+export default function Card({ src, name, order, id }: Props) {
   // const [statusCard, setStatusCard] = useState<"idle" | "active" | "disabled">("idle")
   const cardGameState = useSelector((state: RootState) => state.cardGame)
   const dispatch = useDispatch<AppDispatch>()
@@ -72,6 +77,7 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
         data-status={statusCard}
         data-role={name}
         data-test="card"
+        role="card"
       >
         {/* not flip card */}
         <motion.div
@@ -79,6 +85,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
           variants={backCardVariants}
         >
           <Image
+            width={100}
+            height={100}
             src={web}
             alt="web"
             quality={100}
@@ -86,6 +94,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
             style={{ top: 0, left: 0, transform: "rotateY(180deg)" }}
           />
           <Image
+            width={100}
+            height={100}
             src={web}
             alt="web"
             quality={100}
@@ -93,6 +103,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
             style={{ top: 0, right: 0 }}
           />
           <Image
+            width={100}
+            height={100}
             src={web}
             alt="web"
             quality={100}
@@ -100,6 +112,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
             style={{ bottom: 0, left: 0, transform: "rotate3d(1, 1, 0, 180deg)" }}
           />
           <Image
+            width={100}
+            height={100}
             src={web}
             alt="web"
             quality={100}
@@ -112,6 +126,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
             transition={{ duration: 0.15, ease: "easeOut" }}
           >
             <Image
+              width={100}
+              height={100}
               src={spider}
               alt="spider"
               quality={100}
@@ -125,6 +141,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
           variants={frontCardVariants}
         >
           <Image
+            width={100}
+            height={100}
             src={webGray}
             alt="web"
             quality={100}
@@ -132,6 +150,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
             style={{ top: 0, left: 0, transform: "rotateY(180deg)" }}
           />
           <Image
+            width={100}
+            height={100}
             src={webGray}
             alt="web"
             quality={100}
@@ -139,6 +159,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
             style={{ top: 0, right: 0 }}
           />
           <Image
+            width={100}
+            height={100}
             src={webGray}
             alt="web"
             quality={100}
@@ -146,6 +168,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
             style={{ bottom: 0, left: 0, transform: "rotate3d(1, 1, 0, 180deg)" }}
           />
           <Image
+            width={100}
+            height={100}
             src={webGray}
             alt="web"
             quality={100}
@@ -162,6 +186,8 @@ export default function Card({ src, name, order, id }: { src: any, name: string,
               variants={disabledVariants}
             >
               <Image
+                width={100}
+                height={100}
                 src={src}
                 alt={name}
                 quality={100}

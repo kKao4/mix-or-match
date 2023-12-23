@@ -15,7 +15,7 @@ const modalVariants: Variants = {
   show: { opacity: 1, transition: { duration: 0.4 } }
 }
 
-export default function Modal({ handleOnClick, status, h2, h3 }: { handleOnClick?: any, status: typeof globalState["status"], h2: string, h3?: string }) {
+export default function Modal({ handleOnClick, status, h2, h3 }: { handleOnClick?: () => void, status: typeof globalState["status"], h2: string, h3?: string }) {
   const globalState = useSelector((state: RootState) => state.global)
   const dispatch = useDispatch<AppDispatch>()
   return (

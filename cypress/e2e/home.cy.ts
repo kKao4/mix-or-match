@@ -48,10 +48,13 @@ describe("Home page", () => {
   });
 
   context("Cards", () => {
-    it("flip up/down card when click", () => {
+    it.only("flip up/down card when click", () => {
+      cy.getByData("card").eq(0).invoke("attr", "data-status").should("equal", "idle");
       cy.getByData("card").eq(0).click();
+      cy.getByData("card").eq(0).invoke("attr", "data-status").should("equal", "active");
       cy.wait(1000);
       cy.getByData("card").eq(0).click();
+      cy.getByData("card").eq(0).invoke("attr", "data-status").should("equal", "idle");
       cy.get('[data-status="active"]').should("not.exist");
     });
 

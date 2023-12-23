@@ -7,8 +7,15 @@ import ghost from "@/assets/Ghost.png";
 import pumpkin from "@/assets/Pumpkin.png";
 import skull from "@/assets/Skull.png";
 import joker from "@/assets/joker-icon.png";
+import { StaticImageData } from "next/image";
 
-const array1 = [
+export interface Card {
+  id: number;
+  name: string;
+  src: StaticImageData;
+}
+
+const array1: Card[] = [
   {
     id: 1,
     name: "bat",
@@ -56,13 +63,13 @@ const array1 = [
   },
 ];
 
-const array2 = array1.map((card) => {
+const array2: Card[] = array1.map((card) => {
   return { ...card, id: card.id + array1.length };
 });
 
-export const cards = [...array1, ...array2];
+export const cards: Card[] = [...array1, ...array2];
 
-export function shuffleArray(array: any[]) {
+export function shuffleArray<T>(array: T[]) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];

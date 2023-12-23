@@ -1,7 +1,7 @@
 import styles from "./Victory.module.scss"
 import Modal from "../Modal/Modal"
 
-export default function Victory({ handleOnClick }: { handleOnClick: any }) {
+export default function Victory({ handleOnClick }: { handleOnClick: () => void }) {
   return (
     <Modal
       status="victory"
